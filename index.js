@@ -24,7 +24,7 @@ function main(){
         str = generateRandomSentence(num);
         projectName = new Date().getTime();
         genText('withoutNotation',0.6, 0, 0);
-        genText('withNotation',0.1, 0, 0);
+        genText('withNotation',0.1, -3, 0);
    }
 }
 
