@@ -3,11 +3,11 @@ const path = require('path');
 const TextToSvg = require('text-to-svg');
 const fs = require('fs');
 
-const width = 600; 
-const height = 40;
-
 const times = 1; // 生成次數
 const num = 10; // 生成字段長度
+
+const width = 50*num; 
+const height = 40;
 
 var options = {
     fontSize: 28,
@@ -23,7 +23,7 @@ function main(){
    for(var i=0;i<times;i++){
         str = generateRandomSentence(num);
         projectName = new Date().getTime();
-        genText('withoutNotation',0.6, 5, 0);
+        genText('withoutNotation',0.6, 0, 0);
         genText('withNotation',0.1, 0, 0);
    }
 }
