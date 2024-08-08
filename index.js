@@ -3,11 +3,11 @@ const path = require('path');
 const TextToSvg = require('text-to-svg');
 const fs = require('fs');
 
-const times = 1; // 生成次數
-const num = 10; // 生成字段長度
+const times = 1; // 個別生成張數
+var numArr = [1,2,3]; // 依序生成字段長度
 
-const width = 50 * num; 
-const height = 40;
+const widthBasis = 50; // 一個字的寬度
+const height = 40; // 行高
 
 const fontStyle ={
     withNotation:{
@@ -34,13 +34,20 @@ var options = {
 // 以下不用動
 var str= '';
 var projectName = '';
+var width = 0;
+
 function main(){
-   for(var i=0;i<times;i++){
+    if(numArr.length == 0) return;
+    num = numArr[0];
+    width = widthBasis*num;
+    for(var i=0;i<times;i++){
         str = generateRandomSentence(num);
         projectName = new Date().getTime();
         genText('withNotation',fontStyle.withNotation.name,fontStyle.withNotation.letterSpacing, fontStyle.withNotation.x, fontStyle.withNotation.y,fontStyle.withNotation.outputFolderName);
         genText('withoutNotation',fontStyle.withoutNotation.name,fontStyle.withoutNotation.letterSpacing,fontStyle.withoutNotation.x,fontStyle.withoutNotation.y,fontStyle.withoutNotation.outputFolderName);
-   }
+    }
+    numArr.shift();
+    main();
 }
 
 function genText(type,font_name,letterSpacing,x,y,outputFolderName){
