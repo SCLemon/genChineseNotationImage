@@ -1,11 +1,12 @@
 const sharp = require('sharp');
 const path = require('path');
 const TextToSvg = require('text-to-svg');
+const fs = require('fs');
 
-const width = 800; 
+const width = 600; 
 const height = 40;
 
-const times = 10; // 生成次數
+const times = 1; // 生成次數
 const num = 10; // 生成字段長度
 
 var options = {
@@ -22,7 +23,7 @@ function main(){
    for(var i=0;i<times;i++){
         str = generateRandomSentence(num);
         projectName = new Date().getTime();
-        genText('withoutNotation',0.4, 5, 0);
+        genText('withoutNotation',0.6, 5, 0);
         genText('withNotation',0.1, 0, 0);
    }
 }
@@ -66,9 +67,9 @@ function outputImage(textSvg,path){
 }
 
 function generateRandomSentence(length) {
-    const commonTraditionalChineseCharacters = '的 一 是 不 了 在 人 有 我 他 這 個 們 中 來 上 大 為 說 和 國 地 到 以 子 之 還 沒 想 從 也 你 見 就 給 他們 要 嗎 知 道 行 我 們 年 會 很 些';
+    const dict = fs.readFileSync('dictionary.txt','utf8');
     let sentence = '';
-    const charactersArray = commonTraditionalChineseCharacters.split(' ');
+    const charactersArray = dict.split('\n');
 
     for (let i = 0; i < length; i++) {
         const randomIndex = Math.floor(Math.random() * charactersArray.length);
