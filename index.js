@@ -11,14 +11,16 @@ const height = 40;
 
 const fontStyle ={
     withNotation:{
-        name:'withNotation.ttf', // 填入檔名 （檔案放在 fonts 資料夾下）
-        letterSpacing:0.1, // 字元間隔
-        x:-3, y:0 // 偏移量
+        name:'withNotation.ttf', // 放在 fonts 資料夾
+        letterSpacing:0.1,
+        x:-3, y:0,
+        outputFolderName:'withNotation' // 可自由填寫（系統會自動創建）
     },
     withoutNotation:{
-        name: 'withoutNotation.ttf', // 填入檔名 （檔案放在 fonts 資料夾下）
-        letterSpacing:0.6, // 字元間隔
-        x:0, y:0 // 偏移量
+        name: 'withoutNotation.ttf', // 放在 fonts 資料夾
+        letterSpacing:0.6,
+        x:0, y:0,
+        outputFolderName:'withoutNotation' // 可自由填寫（系統會自動創建）
     },
 }
 
@@ -36,22 +38,23 @@ function main(){
    for(var i=0;i<times;i++){
         str = generateRandomSentence(num);
         projectName = new Date().getTime();
-        genText('withNotation',fontStyle.withNotation.name,fontStyle.withNotation.letterSpacing, fontStyle.withNotation.x, fontStyle.withNotation.y);
-        genText('withoutNotation',fontStyle.withoutNotation.name,fontStyle.withoutNotation.letterSpacing,fontStyle.withoutNotation.x,fontStyle.withoutNotation.y);
+        genText('withNotation',fontStyle.withNotation.name,fontStyle.withNotation.letterSpacing, fontStyle.withNotation.x, fontStyle.withNotation.y,fontStyle.withNotation.outputFolderName);
+        genText('withoutNotation',fontStyle.withoutNotation.name,fontStyle.withoutNotation.letterSpacing,fontStyle.withoutNotation.x,fontStyle.withoutNotation.y,fontStyle.withoutNotation.outputFolderName);
    }
 }
 
-function genText(type,font_name,letterSpacing,x,y){
+function genText(type,font_name,letterSpacing,x,y,outputFolderName){
     options.x= x;
     options.y= y;
     options.letterSpacing = letterSpacing;
     const fontPath = path.join(__dirname, `fonts/${font_name}`);
     const textToSvg = TextToSvg.loadSync(fontPath);
     const textSvg = textToSvg.getSVG(str, options);
-    outputImage(textSvg,`${type}/${projectName}.png`);
+    outputImage(textSvg,outputFolderName,`/${projectName}.png`);
 }
 
-function outputImage(textSvg,path){
+function outputImage(textSvg,folderName,fileName){
+    if (!fs.existsSync(fileName)) fs.mkdirSync(folderName, { recursive: true });
     sharp({
         create: {
             width: width,
@@ -66,7 +69,7 @@ function outputImage(textSvg,path){
             .composite([{
                 input: Buffer.from(textSvg),
                 top: 5, left: 10
-            }]).toFile(path);
+            }]).toFile(folderName+fileName);
     })
     .then(() => {console.log('Image generated and saved');})
     .catch(err => { console.error('Error:', err);});
